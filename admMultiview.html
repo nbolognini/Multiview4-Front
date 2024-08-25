@@ -1,0 +1,70 @@
+<title>Carrito</title>
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/skeleton.css">
+<link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+    
+<!-- Estructura del carro, se guarda en LocalStorage ahora.-->
+<header id="header" class="header">
+    <div class="container">
+        <div class="row">
+            <div class="four columns">
+                <img src="img/logo.jpg" id="logo">
+            </div>
+            <div class="two columns u-pull-right">
+                <ul>
+                    <li class="submenu">  
+                    </li>
+                </ul>
+            </div>
+        </div> 
+    </div>
+</header>
+<!--Barra que separa la parte fija del carro de arriba-->
+<div class="barra">
+    <div class="container">
+        <div class="row">
+        </div>
+    </div>
+</div>
+
+<br><br><br><br>
+<div class="botonera">
+    <a href="admMultiview.html" class="boton">Adm Multiview</a>
+    <a href="agregarCanal.html" class="boton">Agregar Canal</a>
+    <a href="eliminarCanal.html" class="boton">Eliminar Canal</a>
+</div>
+
+<h1 id="encabezado" class="encabezado">Administración Multiview:</h1>
+
+<div class="container">
+    <div id="Parte-izquierda" class="half-width">
+        <h2 id="encabezado" class="encabezado">Canales disponibles:</h2>
+        <!--Canales dinamicos en estructura de cajas
+            Cargados en lista-canales-->
+        <div id="lista-productos" class="container">
+        </div>
+    </div>
+
+    <div id="Parte-derecha" class="half-width">
+        <div id="carrito">
+            <!-- Contenido del carrito -->    
+            <table id="lista-carrito" class="u-full-width">
+                <thead>
+                    <tr>
+                        <th>Vista Previa:</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <!--- Boton que acciona Vaciar lista-carrito en JS -->
+            <a href="#" id="vaciar-carrito" class="button u-full-width">Borrar Pre-carga</a>
+        </div>
+    </div>
+</div>
+
+<script src="js/indexCarrito.js"></script>
+
+</body>
+</html>

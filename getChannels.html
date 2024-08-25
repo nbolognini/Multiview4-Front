@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Signals</title>
+</head>
+<body>
+
+    <h1>Selecciona un Grupo</h1>
+    <select id="groups-dropdown"></select>
+
+    <h1>Selecciona una Señal</h1>
+    <select id="signals-dropdown"></select>
+
+
+    <br><br><br><br><br><br><br>
+
+    <h1>Selecciona un Canal</h1>
+    <select id="channels-dropdown"></select>
+
+    <h1>Lista de Channels</h1>
+    <ul id="channels-list"></ul>
+
+    <h1>Lista de Signals</h1>
+    <ul id="signals-list"></ul>
+
+    <h1>Lista de Groups</h1>
+    <ul id="groups-list"></ul>
+
+    <h1>Lista de Multiviews</h1>
+    <ul id="multiview-list"></ul>
+
+    <h1>Lista de Access</h1>
+    <ul id="access-list"></ul>
+
+    <h1>Lista de Access Grupo</h1>
+    <ul id="access-list2"></ul>
+
+
+    <script>
+//variable para seleccionar el grupo
+let grupoSeleccionado = "";
+// funcion para obtener los grupos
+async function obtenerGroups() {
+    try {
+        const response = await fetch('http://localhost:3000/groups');
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de la base de datos');
+        }
+        const data = await response.json();
+        console.log('Datos recibidos:', data); // Verificar la estructura de los datos
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return [];
+    }
+}
+
+function llenarMenuDesplegableGroups(groups) {
+        const dropdown = document.getElementById('groups-dropdown');
+        dropdown.innerHTML = ''; // Limpiar el menú desplegable antes de agregar nuevas opciones
+
+        // Acá voy a filtrar los grupos que estén activos antes de hacer el forEach
+        groups = groups.filter(group => group.group_status === 1);
+        groups.forEach(group => {
+            const option = document.createElement('option'); //Opciones del menu desplegable
+                option.value = group.group_id;           //Id que voy a asigan a cada seleccion
+                option.textContent = group.group_id;   //Nombre que se va a mostrar en el menu desplegable
+                dropdown.appendChild(option);
+        });
+}
+    
+//imprimo en consola el valor seleccionado del menu desplegable cada vez q cambie
+document.getElementById('groups-dropdown').addEventListener('change', function() {
+    console.log('id_group LETgrupoSeleccionado:', this.value);
+    //actualizdo la variable global "grupoSeleccionado" con el valor seleccionado
+    grupoSeleccionado = this.value;
+});
+
+function llenarMenuDesplegableSignals(signals) {
+        const dropdown = document.getElementById('signals-dropdown');
+        dropdown.innerHTML = ''; // Limpiar el menú desplegable antes de agregar nuevas opciones
+
+        // Acá voy a filtrar los grupos que estén activos antes de hacer el forEach
+        signals = signals.filter(signal => signal.signal_status === 1);
+        signals.forEach(signal => {
+            const option = document.createElement('option'); //Opciones del menu desplegable
+                option.value = signal.signal_id;           //Id que voy a asigan a cada seleccion
+                option.textContent = signal.fk_channel_id + ' | ' + signal.signal_type;   //Nombre que se va a mostrar en el menu desplegable
+                dropdown.appendChild(option);
+        });
+}
+
+// Obtener y mostrar los signals al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    const signals = await obtenerSignals();
+    llenarMenuDesplegableSignals(signals);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+// funcion para mostrar los grupos
+function mostrarGroups(groups) {
+    const groupsList = document.getElementById('groups-list');
+    groupsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+    groups.forEach(group => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `group_id: ${group.group_id},
+                                group_status: ${group.group_status}`;
+        groupsList.appendChild(listItem);
+    });
+} 
+// Obtener y mostrar los grupos al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    const groups = await obtenerGroups();
+    llenarMenuDesplegableGroups(groups);
+}); 
+
+
+
+//funcion para obtner Grupos por id
+async function obtenerAccessGrupo(grupo_id) {
+    try {
+        const response = await fetch('http://localhost:3000/multiview/'+ grupo_id );
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de la base de datos');
+        }
+        const data = await response.json();
+        console.log('Filtro recibidos:', data); // Verificar la estructura de los datos
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return [];
+    }
+}
+
+function mostrarAccessGrupo(access) {
+    const accessList = document.getElementById('access-list2');
+    accessList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+
+    access.forEach(access => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `FKgroup_id: ${access.fk_group_id},
+                                FKchannel_id: ${access.fk_canal_id}, 
+                                signal_type: ${access.signal_type}`;
+        accessList.appendChild(listItem);
+    });
+}
+
+// Obtener y mostrar los access al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    grupo = 'monitoreo';
+    const access2 = await obtenerAccessGrupo(grupo);
+    console.log('access2:', access2);
+    mostrarAccessGrupo(access2);
+});
+
+
+
+
+
+// Función para obtener los datos de los channels
+async function obtenerChannels() {
+    try {
+        const response = await fetch('http://localhost:3000/channels');
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de la base de datos');
+        }
+        const data = await response.json();    // Convertir los datos a JSON y retornarlos como resultado de la función en const data
+        console.log('Datos recibidos:', data); // Verifico la estructura de los datos llegados en la consola del frotnend
+        return data;                           // DEVUELVE EN "data" UN ARRAY DE OBJETOS. CADA OBJETO ES UN CHANNEL
+
+    } catch (error) {
+        console.error('Error:', error);
+        return [];
+    }
+}
+
+function mostrarChannels(channels) {
+    const channelsList = document.getElementById('channels-list');
+    channelsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+
+    // aca filtro los channels que esten activos
+    channels = channels.filter(channel => channel.channel_status === 1);
+    channels.forEach(channel => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `channel_id: ${channel.channel_id}, 
+                                channel_name: ${channel.channel_name}, 
+                                channel_img: ${channel.channel_img}`;
+        channelsList.appendChild(listItem);
+    });
+}
+
+// FUNCION PARA LLENAR EL MENU DESPLEGABLE DE CHANNELS CON LOS DATOS OBTENIDOS DE LA BASE DE DATOS
+function llenarMenuDesplegable(channels) {
+        const dropdown = document.getElementById('channels-dropdown');
+        dropdown.innerHTML = ''; // Limpiar el menú desplegable antes de agregar nuevas opciones
+
+            // aca filtro los channels que esten activos
+        channels = channels.filter(channel => channel.channel_status === 1);
+        channels.forEach(channel => {
+            const option = document.createElement('option'); //Opciones del menu desplegable
+                option.value = channel.channel_id;           //Id que voy a asigan a cada seleccion
+                option.textContent = channel.channel_name;   //Nombre que se va a mostrar en el menu desplegable
+                dropdown.appendChild(option);
+        });
+}
+
+
+// IMPRIMO EN CONSOLA EL VALOR SELECCIONADO DEL MENU DESPLEGABLE CHANNELS CADA VEZ QUE CAMBIE
+document.getElementById('channels-dropdown').addEventListener('change', function() {
+    console.log('ID_channel seleccionado:', this.value);
+});
+
+
+
+// LLENA EL MENU DESPLEGABLE DE CHANNELS AL CARGAR LA PÁGINA, LLAMA A LA FUNCION "llenarMenuDesplegable"
+document.addEventListener('DOMContentLoaded', async () => {
+    const channels = await obtenerChannels();
+    llenarMenuDesplegable(channels);
+});
+
+// LLENA LA LISTA DE CHANNELS AL CARGAR LA PÁGINA, LLAMA A LA FUNCION "mostrarChannels"
+document.addEventListener('DOMContentLoaded', async () => {
+    const channels = await obtenerChannels();
+    mostrarChannels(channels);
+}); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Función para obtener los datos de los channels
+async function obtenerSignals() {
+    try {
+        const response = await fetch('http://localhost:3000/signals');
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de la base de datos');
+        }
+        const data = await response.json();
+        console.log('Datos recibidos:', data); // Verificar la estructura de los datos
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return [];
+    }
+}
+
+
+function mostrarSignals(signals) {
+    const signalsList = document.getElementById('signals-list');
+    signalsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+    signals.forEach(signal => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `FKchannel_id: ${signal.fk_channel_id}, 
+                                signal_type: ${signal.signal_type}, 
+                                signal_url: ${signal.signal_url}`;
+        signalsList.appendChild(listItem);
+    });
+}
+
+
+
+
+
+
+
+
+
+//funcion para obtner multiviews
+async function obtenerMultiviews() {
+    try {
+        const response = await fetch('http://localhost:3000/multiview');
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de la base de datos');
+        }
+        const data = await response.json();
+        console.log('Datos recibidos:', data); // Verificar la estructura de los datos
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return [];
+    }
+}
+
+//funcion para mostrar multiview
+function mostrarMultiviews(multiview) {
+    const multiviewList = document.getElementById('multiview-list');
+    multiviewList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+    multiview.forEach(multiview => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `
+                                fk_group_id: ${multiview.fk_group_id},
+                                multiview_order: ${multiview.multiview_order},
+                                fk_canal_id: ${multiview.fk_canal_id},
+                                signal_type: ${multiview.signal_type}`,
+        multiviewList.appendChild(listItem);
+    });
+}
+
+
+
+// Función para obtener y mostrar los access
+async function obtenerAccess() {
+    try {
+        const response = await fetch('http://localhost:3000/access');
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos de la base de datos');
+        }
+        const data = await response.json();
+        console.log('Datos recibidos:', data); // Verificar la estructura de los datos
+        return data;
+    } catch (error) {
+        console.error('Error:', error);
+        return [];
+    }
+}
+
+// Función para mostrar los access en la página
+function mostrarAccess(access) {
+    const accessList = document.getElementById('access-list');
+    accessList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
+
+    access.forEach(access => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `FKgroup_id: ${access.fk_group_id},
+                                FKchannel_id: ${access.fk_canal_id}, 
+                                signal_type: ${access.signal_type}`;
+        accessList.appendChild(listItem);
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// Obtener y mostrar los grupos al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    const groups = await obtenerGroups();
+    mostrarGroups(groups);
+}); 
+
+
+
+
+// Obtener y mostrar los signals al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    const signals = await obtenerSignals();
+    mostrarSignals(signals);
+});
+
+
+// Obtener y mostrar los multiviews al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    const multiview = await obtenerMultiviews();
+    mostrarMultiviews(multiview);
+});
+
+
+// Obtener y mostrar los access al cargar la página
+document.addEventListener('DOMContentLoaded', async () => {
+    const access = await obtenerAccess();
+    mostrarAccess(access);
+});
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

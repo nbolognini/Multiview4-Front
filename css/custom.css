@@ -1,0 +1,270 @@
+html {
+    font-size: 62.5%;
+}
+body {
+    background-color: #f5f3f3
+}
+h1 {
+    text-align: center;
+}
+h2 {
+    font-size: 3rem;
+}
+h4 {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
+    padding: 20px 0 0 0;
+    background: white;
+    text-align: center;
+}
+@media (min-width: 750px) {
+    header {
+        text-align: left;
+    }
+}
+
+ul {
+    list-style: none;
+}
+.tituloProducto {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.barra {
+    position: fixed;
+    top: 60px; /* Ajusta este valor según la altura de tu header */
+    left: 0;
+    width: 100%;
+    z-index: 999; /* Un z-index menor que el header, pero aún alto para estar sobre el contenido */
+    padding: 20px 0;
+    background: #0053a0; /* Old browsers */
+    background: -moz-linear-gradient(left, #0053a0 0%, #007acc 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #0053a0 0%,#007acc 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #0053a0 0%,#007acc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0053a0', endColorstr='#007acc',GradientType=1 ); /* IE6-9 */
+}
+
+.barra p {
+    margin:0;
+    color: white;
+}
+
+#encabezado {
+    margin: 30px 0;
+}
+
+
+.borrar-producto {
+    background-color: red;
+    border-radius: 0%;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+}
+
+
+#hero {
+    background-image:url(../img/hero.jpg);
+    height: 350px;
+    background-size: cover;
+}
+
+.submenu {
+    position: relative;
+}
+
+.submenu #carrito{
+    display: none;
+}
+.submenu:hover #carrito{
+    display: block;
+    position: absolute;
+    right:0;
+    top:100%;
+    z-index: 1;
+    background-color: white;
+    padding: 20px;
+    min-height: 400px;
+    min-width: 300px;
+}
+.vacio {
+    padding: 10px;
+    background-color: crimson;
+    text-align: center;
+    border-radius: 10px;
+    color: white;
+}
+.contenido-hero {
+    margin-top: 80px;
+    color: white;
+}
+.contenido-hero form {
+    position: relative;
+    margin-bottom: 0;
+}
+.contenido-hero form #buscador {
+    height: 50px;
+    margin-bottom: 0;
+}
+
+
+
+.icono {
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 60px;
+    background-size: 30px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+@media (min-width: 750px) {
+    .icono {
+        margin-bottom:0;
+    }
+}
+.icono1 {
+    background-image: url(../img/icono1.png);
+}
+.icono2 {
+    background-image: url(../img/icono2.png);
+}
+.icono3 {
+    background-image: url(../img/icono3.png);
+}
+
+#lista-productos .row {
+    margin-bottom:20px;
+}
+.agregar-carrito {
+    margin:10px 0;
+}
+
+.card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave */
+    border-radius: 10px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que todo dentro de .card se ajuste a los bordes redondeados */
+    transition: transform 0.2s; /* Transición suave para hover */
+  }
+
+  .card2 {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Sombra suave */
+    border-radius: 10px; /* Bordes redondeados */
+    overflow: hidden; /* Asegura que todo dentro de .card se ajuste a los bordes redondeados */
+    transition: transform 0.2s; /* Transición suave para hover */
+  }
+
+@media (min-width: 550px) {
+    .card {
+        text-align: left;
+    }
+}
+.info-card  {
+    padding: 10px 20px;
+}
+
+.info-card2  {
+    padding: 10px 20px;
+}
+
+.info-card p, 
+.card h4 {
+    margin-bottom: 5px;
+}
+.info-card .cajaInf {
+    /* text-decoration: line-through; */
+    font-size: 18px;
+    margin-top: 10px;
+
+}
+.info-card .cajaInf textoIzquierda {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.info-card .cajaInf textoDerecha {
+    font-weight: 700;
+    font-size: 22px;
+}
+
+.footer {
+    margin-top: 40px;
+    border-top:1px solid #aaa;;
+    padding-top: 40px;   
+}
+.footer .menu a{
+display: block;
+margin-bottom: 10px;
+text-decoration: none;
+}
+
+.productoForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    margin: 20px 0;
+}
+
+
+
+.containerAgregarProductos {
+    display: flex;
+    justify-content: flex-start; /* O puedes usar 'center' para centrar los elementos en la última fila si no está completa */
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px; /* Espacio uniforme entre elementos */
+}
+
+.containerAgregarProductos > * {
+    width: calc(25% - 20px); /* Ajusta el ancho para 4 elementos por fila, considerando el gap */
+    height: 500px; /* Altura fija, ajusta según necesidad */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.contenedorBase {
+    display: flex;
+    justify-content: center;
+    flex-direction: column; /* Si se desea mantener los elementos apilados verticalmente */
+    align-items: center; /* Centra horizontalmente los elementos hijos si flex-direction es column */
+    max-width: 1000px; /* Establece un ancho máximo de 1000px */
+    margin: 0 auto; /* Centra el contenedor en la página */
+}
+
+.botonera {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Esto añade espacio entre los elementos */
+    padding: 10px;
+}
+
+.boton {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.boton:hover {
+    background-color: #0056b3;
+}
+
+.half-width {
+    width: 50%;
+    float: left;
+}

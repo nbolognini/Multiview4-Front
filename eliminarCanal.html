@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Eliminar Productos</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+    
+
+<header id="header" class="header">
+    <div class="container">
+        <div class="row">
+            <div class="four columns">
+                <img src="img/logo.jpg" id="logo">
+            </div>
+            <div class="two columns u-pull-right">
+                <ul>
+                    <li class="submenu">
+                        <img src="img/cart2.png" id="img-carrito">
+                            <!--- Datos del carro-->
+                        <div id="carrito">  
+                            <table>
+                                <thead>
+                                    <tr></tr>
+                                </thead>
+                                    <tbody></tbody>
+                            </table>
+                            <a href="#" id="vaciar-carrito" class="button u-full-width"></a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div> 
+    </div>
+</header>
+    <!--Barra que separa la parte fija del carro de arriba-->
+    <div class="barra">
+        <div class="container">
+            <div class="row">
+            </div>
+        </div>
+    </div>
+    <br><br><br><br>
+    <div class="botonera">
+        <a href="admMultiview.html" class="boton">Adm Multiview</a>
+        <a href="agregarCanal.html" class="boton">Agregar Canal</a>
+        <a href="eliminarCanal.html" class="boton">Eliminar Canal</a>
+    </div>
+
+    <!--Titulo arrriba:-->
+    <h1 id="encabezado" class="encabezado">Eliminar Canal:</h1>
+    <!--Productos dinamicos en estructura de cajas
+                Cargados en lista-productos-->
+    <div id="lista-productos" class="container">
+
+
+    <script src="js/eliminarProductos.js"></script>
+
+</body>
+</html>

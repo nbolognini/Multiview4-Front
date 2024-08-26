@@ -8,15 +8,14 @@
 <body>
 
     <h1>Selecciona un Grupo</h1>
-    <select id="groups-dropdown"></select>
+    <select id="groups-dropdown">
+    </select>
 
     <h1>Selecciona una señal basada en el Grupo Seleccionado</h1>
     <select id="signals-g"></select>
     
-    <br><br><br><br><br><br><br>
 
-    <h1>Selecciona una Señal</h1>
-    <select id="signals-dropdown"></select>
+    <br><br><br><br><br><br><br>
 
     <h1>Selecciona un Canal</h1>
     <select id="channels-dropdown"></select>
@@ -30,18 +29,14 @@
     <h1>Lista de Groups</h1>
     <ul id="groups-list"></ul>
 
-    <h1>Lista de Multiviews</h1>
-    <ul id="multiview-list"></ul>
-
     <h1>Lista de Access</h1>
     <ul id="access-list"></ul>
 
-    <h1>Lista de Access Grupo</h1>
-    <ul id="access-list2"></ul>
-
     <script>
+
 //variable para seleccionar el grupo
-let grupoSeleccionado = "";
+let grupoSeleccionado = "sistemas26";
+
 // funcion para obtener los grupos
 async function obtenerGroups() {
     try {
@@ -57,7 +52,6 @@ async function obtenerGroups() {
         return [];
     }
 }
-
 function llenarMenuDesplegableGroups(groups) {
         const dropdown = document.getElementById('groups-dropdown');
         dropdown.innerHTML = ''; // Limpiar el menú desplegable antes de agregar nuevas opciones
@@ -72,9 +66,9 @@ function llenarMenuDesplegableGroups(groups) {
         });
 }
     
-//imprimo en consola el valor seleccionado del menu desplegable cada vez q cambie
+// ACTUALIZA LA VARIABLE GLOBAL "grupoSeleccionado" CADA VEZ QUE CAMBIA EL VALOR DEL MENÚ DESPLEGABLE
 document.getElementById('groups-dropdown').addEventListener('change', function() {
-    console.log('id_group LETgrupoSeleccionado:', this.value);
+    console.log('id_group LETgrupoSeleccionado:', this.value); // Imprime en consola el valor seleccionado
     //actualizdo la variable global "grupoSeleccionado" con el valor seleccionado
     grupoSeleccionado = this.value;
    // Llama a llenarMenuDesplegableSignalsGroups después de actualizar grupoSeleccionado
@@ -82,31 +76,7 @@ document.getElementById('groups-dropdown').addEventListener('change', function()
         llenarMenuDesplegableSignalsGroups(access);
     });
 });
-
-function llenarMenuDesplegableSignalsGroups(access) {
-        const dropdown = document.getElementById('signals-g');
-        dropdown.innerHTML = ''; // Limpiar el menú desplegable antes de agregar nuevas opciones
-            
-        // Acá voy a filtrar los grupos que estén activos antes de hacer el forEach
-        access = access.filter(access => access.fk_group_id === grupoSeleccionado);
-        access.forEach(access => {
-            const option = document.createElement('option'); //Opciones del menu desplegable
-                option.value = access.signal_id;           //Id que voy a asigan a cada seleccion
-                option.textContent = access.fk_channel_id + ' | ' + access.signal_type;   //Nombre que se va a mostrar en el menu desplegable
-                dropdown.appendChild(option);
-        }); 
-}
-
-// Obtener y mostrar los signals al cargar la página
-document.addEventListener('DOMContentLoaded', async () => {
-    grupo = 'monitoreo';
-    const access = await obtenerAccessGrupo(grupo);
-    console.log('2) access:', access);
-    llenarMenuDesplegableSignalsGroups(access);
-});
-
-
-//funcion para obtner Grupos por id
+//funcion para obtner Accesos a señales por grupo
 async function obtenerAccessGrupo(grupo_id) {
     try {
         const response = await fetch('http://localhost:3000/multiview/' + grupo_id);
@@ -121,19 +91,7 @@ async function obtenerAccessGrupo(grupo_id) {
         return [];
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
+//funcion para llenar el menu desplegable de signals por grupo
 function llenarMenuDesplegableSignalsGroups(access) {
     const dropdown = document.getElementById('signals-g');
     dropdown.innerHTML = ''; // Limpiar el menú desplegable antes de agregar nuevas opciones
@@ -145,18 +103,49 @@ function llenarMenuDesplegableSignalsGroups(access) {
     access.forEach(access => {
         const option = document.createElement('option'); // Opciones del menú desplegable
         option.value = access.signal_id; // Id que voy a asignar a cada selección
-        option.textContent = access.fk_channel_id + ' | ' + access.signal_type; // Nombre que se va a mostrar en el menú desplegable
+        option.textContent = access.fk_canal_id + ' | ' + access.signal_type; // Nombre que se va a mostrar en el menú desplegable
         dropdown.appendChild(option);
     });
 }
 
-// Obtener y mostrar los signals al cargar la página
-document.addEventListener('DOMContentLoaded', async () => {
-    grupo = 'monitoreo';
-    const access = await obtenerAccessGrupo(grupo);
-    console.log('access:', access);
-    llenarMenuDesplegableSignalsGroups(access);
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -206,35 +195,36 @@ function mostrarAccessGrupo(access) {
     });
 }
 
-// Obtener y mostrar los access al cargar la página
+
+
+
+
+
+
+
+
+
+// LLENA LA LISTA                      DE CHANNELS AL CARGAR LA PÁGINA, LLAMA A LA FUNCION "obtenerChannels" y "mostrarChannels"
 document.addEventListener('DOMContentLoaded', async () => {
-    grupo = 'monitoreo';
-    const access2 = await obtenerAccessGrupo(grupo);
-    console.log('access2:', access2);
-    mostrarAccessGrupo(access2);
-});
-
-
-
-
-
-// Función para obtener los datos de los channels
+    // Obtener los datos de los channels y lo cargo en la constante "channels"
+    const canalesObtenidos = await obtenerChannels();
+    mostrarChannels(canalesObtenidos);
+}); 
 async function obtenerChannels() {
     try {
         const response = await fetch('http://localhost:3000/channels');
         if (!response.ok) {
             throw new Error('Error al obtener los datos de la base de datos');
         }
-        const data = await response.json();    // Convertir los datos a JSON y retornarlos como resultado de la función en const data
-        console.log('Datos recibidos:', data); // Verifico la estructura de los datos llegados en la consola del frotnend
-        return data;                           // DEVUELVE EN "data" UN ARRAY DE OBJETOS. CADA OBJETO ES UN CHANNEL
+        const data = await response.json();    // Convertir los datos a JSON (objeto de JavaScript) y asignarlos a la constante "data"
+        console.log('Datos recibidos:', data); // Veo por consola del front los datos recibidos
+        return data;                           // Retorno en esta función los datos recibidos de la base de datos en formato JSON
 
-    } catch (error) {
+        } catch (error) {
         console.error('Error:', error);
         return [];
     }
 }
-
 function mostrarChannels(channels) {
     const channelsList = document.getElementById('channels-list');
     channelsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
@@ -250,6 +240,11 @@ function mostrarChannels(channels) {
         channelsList.appendChild(listItem);
     });
 }
+
+
+
+
+
 
 // FUNCION PARA LLENAR EL MENU DESPLEGABLE DE CHANNELS CON LOS DATOS OBTENIDOS DE LA BASE DE DATOS
 function llenarMenuDesplegable(channels) {
@@ -274,37 +269,11 @@ document.getElementById('channels-dropdown').addEventListener('change', function
 
 
 
-// LLENA EL MENU DESPLEGABLE DE CHANNELS AL CARGAR LA PÁGINA, LLAMA A LA FUNCION "llenarMenuDesplegable"
+// LLENA EL MENU DESPLEGABLE           DE CHANNELS AL CARGAR LA PÁGINA, LLAMA A LA FUNCION "llenarMenuDesplegable"
 document.addEventListener('DOMContentLoaded', async () => {
     const channels = await obtenerChannels();
     llenarMenuDesplegable(channels);
 });
-
-// LLENA LA LISTA DE CHANNELS AL CARGAR LA PÁGINA, LLAMA A LA FUNCION "mostrarChannels"
-document.addEventListener('DOMContentLoaded', async () => {
-    const channels = await obtenerChannels();
-    mostrarChannels(channels);
-}); 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -325,8 +294,6 @@ async function obtenerSignals() {
         return [];
     }
 }
-
-
 function mostrarSignals(signals) {
     const signalsList = document.getElementById('signals-list');
     signalsList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
@@ -340,45 +307,6 @@ function mostrarSignals(signals) {
     });
 }
 
-
-
-
-
-
-
-
-
-//funcion para obtner multiviews
-async function obtenerMultiviews() {
-    try {
-        const response = await fetch('http://localhost:3000/multiview');
-        if (!response.ok) {
-            throw new Error('Error al obtener los datos de la base de datos');
-        }
-        const data = await response.json();
-        console.log('Datos recibidos:', data); // Verificar la estructura de los datos
-        return data;
-    } catch (error) {
-        console.error('Error:', error);
-        return [];
-    }
-}
-
-//funcion para mostrar multiview
-function mostrarMultiviews(multiview) {
-    const multiviewList = document.getElementById('multiview-list');
-    multiviewList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
-
-    multiview.forEach(multiview => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `
-                                fk_group_id: ${multiview.fk_group_id},
-                                multiview_order: ${multiview.multiview_order},
-                                fk_canal_id: ${multiview.fk_canal_id},
-                                signal_type: ${multiview.signal_type}`,
-        multiviewList.appendChild(listItem);
-    });
-}
 
 
 
@@ -397,8 +325,6 @@ async function obtenerAccess() {
         return [];
     }
 }
-
-// Función para mostrar los access en la página
 function mostrarAccess(access) {
     const accessList = document.getElementById('access-list');
     accessList.innerHTML = ''; // Limpiar la lista antes de agregar nuevos elementos
@@ -423,39 +349,23 @@ function mostrarAccess(access) {
 
 
 
-// Obtener y mostrar los grupos al cargar la página
+// al cargar la página, obtener y mostrar los groups
 document.addEventListener('DOMContentLoaded', async () => {
     const groups = await obtenerGroups();
     mostrarGroups(groups);
 }); 
 
-
-
-
-// Obtener y mostrar los signals al cargar la página
+// Al cargar la página, obtener y mostrar los signals
 document.addEventListener('DOMContentLoaded', async () => {
     const signals = await obtenerSignals();
     mostrarSignals(signals);
 });
 
-
-// Obtener y mostrar los multiviews al cargar la página
-document.addEventListener('DOMContentLoaded', async () => {
-    const multiview = await obtenerMultiviews();
-    mostrarMultiviews(multiview);
-});
-
-
-// Obtener y mostrar los access al cargar la página
+// Al cargar la página, obtener y mostrar los access
 document.addEventListener('DOMContentLoaded', async () => {
     const access = await obtenerAccess();
     mostrarAccess(access);
 });
-
-
-
-
-
 
 
     </script>
